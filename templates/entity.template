@@ -1,0 +1,41 @@
+import {IsNotEmpty} from "class-validator";
+import {isNullOrUndefined} from "util";
+
+import {I{{class_name}}Model, {{class_name}}Model} from "../models/{{class_name}}Model";
+import {I{{class_name}}} from "../interfaces/I{{class_name}}";
+import {Entity} from "../../../services/classes/Entity";
+
+export class {{class_name}} extends Entity<I{{class_name}}Model> implements I{{class_name}} {
+
+    protected data: any;
+
+    get id(): any { return this.data._id }
+
+    {{foreach_field}}
+
+    @IsNotEmpty()
+    get {{field}}(): {{type}} { return this.data.{{field}} }
+    set {{field}}({{field}}: {{type}}) { this.data.{{field}} = {{field}}; this.setModified('{{field}}'); }
+
+    {{end}}
+
+    static get factory() { return new {{class_name}}() }
+
+    constructor (data?: I{{class_name}}) {
+        super({{class_name}}Model);
+
+        if (isNullOrUndefined(data)) {
+            this.data = {};
+        } else {
+            this.data = data;
+        }
+    }
+
+    public findOne(criteria: Object, callback: (err: any, res: any) => void) {
+        super.findOne({{class_name}}, criteria, callback);
+    }
+
+    public find(criteria: Object, callback: (err: any, res: any[]) => void) {
+        super.find({{class_name}}, criteria, callback);
+    }
+}

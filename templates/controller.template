@@ -1,0 +1,95 @@
+import {Request, Response} from "express";
+import {{{class_name}}} from "../entities/{{class_name}}";
+import {validate} from "class-validator";
+import {ResponseManager} from "../../../services/ResponseManager";
+import {isNullOrUndefined} from "util";
+import {log} from "../../../commons/Logger";
+import * as mongoose from "mongoose";
+import {I{{class_name}}} from "../interfaces/I{{class_name}}";
+
+export class {{class_name}}Controller {
+
+    static Add{{class_name}}(req: Request, res: Response) {
+        let {{_class_name}} = new {{class_name}}(req.body);
+
+            validate({{_class_name}}).then(errors => {
+                if (errors.length > 0) {
+                    log.warn({data: {errors: errors}}, "Walidacja nie powiodła się");
+                    return ResponseManager.genericBadRequest(res);
+                }
+                log.trace("Walidacja ok");
+
+                {{_class_name}}.persist(() => {
+                    return ResponseManager.genericOK(res);
+                });
+            });
+
+        });
+    }
+
+    static Get{{class_name}}(req: Request, res: Response) {
+        {{class_name}}.factory.findOne({_id: req.params.id}, (err: any, {{_class_name}}: {{class_name}}) => {
+            if (err) {
+                log.error({data:{errors:err}}, "Błąd czytania z bazy danych");
+                return ResponseManager.genericBadRequest(res);
+            }
+
+            if ({{_class_name}} === null) {
+                log.error({data: {id: req.params.id}}, "Nieprawidłowy identyfikator");
+                return ResponseManager.genericNotFound(res);
+            }
+
+            return ResponseManager.genericOK(res, null, {{_class_name}});
+        });
+    }
+
+    static Update{{class_name}}(req: Request, res: Response) {
+
+        {{class_name}}.factory.findOne({ id: req.params.id }, (err: any, {{_class_name}}: {{class_name}}) => {
+            if (err) {
+                log.error({data: {errors: err}}, "Błąd czytania z bazy danych");
+                return ResponseManager.genericBadRequest(res);
+            }
+
+            if ({{_class_name}} === null) {
+                log.error({data: {id: req.params.id}}, "Nieprawidłowy identyfikator");
+                return ResponseManager.genericNotFound(res);
+            }
+
+            {{_class_name}}.setData(req.body);
+
+            validate({{_class_name}}).then(errors => {
+                if (errors.length > 0)  {
+                    log.warn({data:{errors: errors}}, "Obiekt po zmianie nie przeszedł walidacji");
+                    return ResponseManager.genericBadRequest(res);
+                }
+            });
+
+            {{_class_name}}.persist(() => {
+                return ResponseManager.genericOK(res);
+            });
+        });
+
+    }
+
+    static Remove{{class_name}}(req: Request, res: Response) {
+
+        {{class_name}}.factory.findOne({id: req.params.id}, (err: any, {{_class_name}}: {{class_name}}) => {
+            if (err) {
+                log.error({data:{error:err}}, "Nie udało się pobrać z bazy");
+                return ResponseManager.genericBadRequest(res);
+            }
+
+
+            if (isNullOrUndefined({{_class_name}})) {
+                log.warn("Nie znaleziono");
+                return ResponseManager.genericNotFound(res);
+            }
+
+            {{_class_name}}.remove(null, (err:any) => {
+                return ResponseManager.genericOK(res);
+            })
+        });
+    }
+
+}

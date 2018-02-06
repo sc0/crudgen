@@ -1,0 +1,6 @@
+export interface I{{class_name}} {
+    {{foreach_field}}
+    {{field}}: {{type}};
+    {{end}}
+}
+

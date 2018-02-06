@@ -1,0 +1,20 @@
+import * as mongoose from "mongoose";
+
+import {I{{class_name}}} from "../interfaces/I{{class_name}}";
+
+export interface I{{class_name}}Model extends I{{class_name}}, mongoose.Document {}
+
+let {{_class_name}}Schema = new mongoose.Schema({
+
+    {{foreach_field}}
+
+    {{field}}: {
+        type: {{type}},
+        required: true,
+        unique: false
+    },
+
+    {{end}}
+});
+
+export let {{class_name}}Model = mongoose.model<I{{class_name}}Model>("{{class_name}}", {{class_name}}Schema);

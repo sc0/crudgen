@@ -1,0 +1,5 @@
+map:
+  interface: 'interfaces'
+  entity: 'entities'
+  controller: 'controllers'
+  model: 'models'

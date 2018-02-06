@@ -1,0 +1,10 @@
+person:
+  fields:
+    - name:
+        type: string
+
+    - lastname:
+        type: string
+
+    - age:
+        type: number

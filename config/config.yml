@@ -1,5 +1,9 @@
-map:
-  interface: 'interfaces'
-  entity: 'entities'
-  controller: 'controllers'
-  model: 'models'
+path: input/person.yml
+output: output
+
+files:
+  - interface.template
+  - entity.template
+  - model.template
+  - controller.template
+

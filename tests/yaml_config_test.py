@@ -11,9 +11,9 @@ class TestYamlTests(unittest.TestCase):
         self.cfg = ConfigManager()
 
     def test_load_config(self):
-        self.assertTrue('map' in self.cfg.config)
-        self.assertTrue('interface' in self.cfg.config['map'])
-        self.assertEqual(len(self.cfg.config['map']), 4)
+        self.assertEqual(self.cfg.config.path, 'input/person.yml')
+        self.assertEqual(self.cfg.config.output, 'output')
+        self.assertEqual(len(self.cfg.config.files), 4, self.cfg.config.files)
 
     def test_load_yaml_object(self):
         obj = self.cfg.load_input('input/person.yml')

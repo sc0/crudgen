@@ -7,3 +7,8 @@ files:
   - model.template
   - controller.template
 
+output_names:
+  - 'I{{class_name}}.ts'
+  - '{{class_name}}.ts'
+  - '{{class_name}}Model.ts'
+  - '{{class_name}}Controller.ts'

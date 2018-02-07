@@ -13,7 +13,8 @@ class TestYamlTests(unittest.TestCase):
     def test_load_config(self):
         self.assertEqual(self.cfg.config.path, 'input/person.yml')
         self.assertEqual(self.cfg.config.output, 'output')
-        self.assertEqual(len(self.cfg.config.files), 4, self.cfg.config.files)
+        self.assertEqual(len(self.cfg.config.files), 4)
+        self.assertEqual(len(self.cfg.config.output_names), 4)
 
     def test_load_yaml_object(self):
         obj = self.cfg.load_input('input/person.yml')

@@ -43,6 +43,33 @@ export class {{class_name}}Controller {
         });
     }
 
+    static Get{{class_name_plural}}(req: Request, res: Response) {
+        {{class_name}}.factory.find((err: any, {{_class_name_plural}}: {{class_name}}[]) => {
+            if (err) {
+                log.error({data:{errors:err}}, "Błąd czytania z bazy danych");
+                return ResponseManager.genericBadRequest(res);
+            }
+
+            return ResponseManager.genericOK(res, null, {{_class_name_plural}});
+        });
+    }
+
+    static Get{{class_name}}(req: Request, res: Response) {
+        {{class_name}}.factory.findOne({_id: req.params.id}, (err: any, {{_class_name}}: {{class_name}}) => {
+            if (err) {
+                log.error({data:{errors:err}}, "Błąd czytania z bazy danych");
+                return ResponseManager.genericBadRequest(res);
+            }
+
+            if ({{_class_name}} === null) {
+                log.error({data: {id: req.params.id}}, "Nieprawidłowy identyfikator");
+                return ResponseManager.genericNotFound(res);
+            }
+
+            return ResponseManager.genericOK(res, null, {{_class_name}});
+        });
+    }
+
     static Update{{class_name}}(req: Request, res: Response) {
 
         {{class_name}}.factory.findOne({ id: req.params.id }, (err: any, {{_class_name}}: {{class_name}}) => {

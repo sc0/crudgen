@@ -23,5 +23,6 @@ class TestYamlTests(unittest.TestCase):
         self.assertEqual(len(obj.fields), 3)
         self.assertIsInstance(obj.fields[0], YamlObject.Field)
         self.assertEqual(obj.fields[0].name, 'name')
+        self.assertEqual(obj.plural_class_name, 'persons')
 
 

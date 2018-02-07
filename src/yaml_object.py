@@ -15,14 +15,19 @@ class YamlObject:
 
     def __init__(self, data):
         self.class_name = ''
+        self.plural_class_name = ''
         self.fields = []
         self.parse_data(data)
 
     def parse_data(self, data):
         self.class_name, fields = data.popitem()
 
-        name, props = fields.popitem()
+        while len(fields) > 0:
+            name, val = fields.popitem()
 
-        if name == 'fields':
-            for f in props:
-                self.fields.append(YamlObject.Field(f))
+            if name == 'plural':
+                self.plural_class_name = val
+
+            if name == 'fields':
+                for f in val:
+                    self.fields.append(YamlObject.Field(f))

@@ -17,4 +17,4 @@ let {{_class_name}}Schema = new mongoose.Schema({
     {{end}}
 });
 
-export let {{class_name}}Model = mongoose.model<I{{class_name}}Model>("{{class_name}}", {{class_name}}Schema);
+export let {{class_name}}Model = mongoose.model<I{{class_name}}Model>("{{class_name}}", {{_class_name}}Schema);

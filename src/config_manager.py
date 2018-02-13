@@ -9,7 +9,6 @@ class ConfigManager:
     class Configuration:
 
         def __init__(self, data):
-            self.path = data['path']
             self.output = data['output']
             self.files = data['files']
             self.output_names = data['output_names']

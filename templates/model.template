@@ -9,7 +9,7 @@ let {{_class_name}}Schema = new mongoose.Schema({
     {{foreach_field}}
 
     {{field}}: {
-        type: {{type}},
+        type: {{^type}},
         required: true,
         unique: false
     },

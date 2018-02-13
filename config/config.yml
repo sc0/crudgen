@@ -12,3 +12,9 @@ output_names:
   - '{{class_name}}.ts'
   - '{{class_name}}Model.ts'
   - '{{class_name}}Controller.ts'
+
+output_directories:
+  - 'interfaces'
+  - 'entities'
+  - 'models'
+  - 'controllers'

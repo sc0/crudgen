@@ -7,23 +7,39 @@ import {log} from "../../../commons/Logger";
 import * as mongoose from "mongoose";
 import {I{{class_name}}} from "../interfaces/I{{class_name}}";
 
+import Utils = require("../../auth/commons/Utils");
+
 export class {{class_name}}Controller {
 
     static Add{{class_name}}(req: Request, res: Response) {
         let {{_class_name}} = new {{class_name}}(req.body);
 
-            validate({{_class_name}}).then(errors => {
-                if (errors.length > 0) {
-                    log.warn({data: {errors: errors}}, "Walidacja nie powiodła się");
+        validate({{_class_name}}).then(errors => {
+            if (errors.length > 0) {
+                log.warn({data: {errors: errors}}, "Walidacja nie powiodła się");
+                return ResponseManager.genericBadRequest(res);
+            }
+            log.trace("Walidacja ok");
+
+            {{_class_name}}.persist((err: any, product: any) => {
+                if (err) {
+                    if (err.code == 11000) {
+                        let field = Utils.retrieveDuplicateFieldFromMongoError(err);
+                        log.error({data:{errors:err}}, "Błąd przy zapisaniu użytkownika - zduplikowana wartość: " + field);
+
+                        let responseContent = {
+                            problem: "duplicated",
+                            field: field,
+                        };
+
+                        return ResponseManager.genericBadRequest(res, null, responseContent);
+                    }
+
                     return ResponseManager.genericBadRequest(res);
                 }
-                log.trace("Walidacja ok");
 
-                {{_class_name}}.persist(() => {
-                    return ResponseManager.genericOK(res);
-                });
+                return ResponseManager.genericOK(res);
             });
-
         });
     }
 
@@ -54,22 +70,6 @@ export class {{class_name}}Controller {
         });
     }
 
-    static Get{{class_name}}(req: Request, res: Response) {
-        {{class_name}}.factory.findOne({_id: req.params.id}, (err: any, {{_class_name}}: {{class_name}}) => {
-            if (err) {
-                log.error({data:{errors:err}}, "Błąd czytania z bazy danych");
-                return ResponseManager.genericBadRequest(res);
-            }
-
-            if ({{_class_name}} === null) {
-                log.error({data: {id: req.params.id}}, "Nieprawidłowy identyfikator");
-                return ResponseManager.genericNotFound(res);
-            }
-
-            return ResponseManager.genericOK(res, null, {{_class_name}});
-        });
-    }
-
     static Update{{class_name}}(req: Request, res: Response) {
 
         {{class_name}}.factory.findOne({ id: req.params.id }, (err: any, {{_class_name}}: {{class_name}}) => {
@@ -92,7 +92,23 @@ export class {{class_name}}Controller {
                 }
             });
 
-            {{_class_name}}.persist(() => {
+            {{_class_name}}.persist((err: any, product: any) => {
+                if (err) {
+                    if (err.code == 11000) {
+                        let field = Utils.retrieveDuplicateFieldFromMongoError(err);
+                        log.error({data:{errors:err}}, "Błąd przy zapisaniu użytkownika - zduplikowana wartość: " + field);
+
+                        let responseContent = {
+                            problem: "duplicated",
+                            field: field,
+                        };
+
+                        return ResponseManager.genericBadRequest(res, null, responseContent);
+                    }
+
+                    return ResponseManager.genericBadRequest(res);
+                }
+
                 return ResponseManager.genericOK(res);
             });
         });

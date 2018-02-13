@@ -1,0 +1,12 @@
+facility:
+  plural: facilities
+
+  fields:
+    - facilityName:
+        type: string
+
+    - companyTaxId:
+        type: string
+
+    - address:
+        type: IFacilityAddress

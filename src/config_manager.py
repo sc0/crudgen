@@ -10,12 +10,13 @@ class ConfigManager:
 
         def __init__(self, data):
             self.output = data['output']
+            self.templates_dir = data['templates']
             self.files = data['files']
             self.output_names = data['output_names']
             self.output_dirs = data['output_directories']
 
-    def __init__(self, output_root):
-        with open('config/config.yml', 'r') as config_file:
+    def __init__(self, config_file, output_root):
+        with open(config_file, 'r') as config_file:
             self.config = ConfigManager.Configuration(yaml.load(config_file))
 
         self.yaml_data = None
@@ -33,7 +34,6 @@ class ConfigManager:
         def lower_first(s): return s[:1].lower() + s[1:] if s else ''
 
         def upper_first(s): return s[:1].upper() + s[1:] if s else ''
-
 
         class_name_regex = re.compile('{{\s?class_name\s?}}')
         lclass_name_regex = re.compile('{{\s?_class_name\s?}}')
@@ -55,7 +55,7 @@ class ConfigManager:
 
         for filename in self.config.files:
 
-            with open(os.path.join('templates', filename), 'r') as input_file:
+            with open(os.path.join(self.config.templates_dir, filename), 'r') as input_file:
                 with open(os.path.join(output_path, filename), 'w') as output_file:
                     while True:
                         line = input_file.readline()

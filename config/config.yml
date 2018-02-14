@@ -1,4 +1,5 @@
 output: output
+templates: templates
 
 files:
   - interface.template
